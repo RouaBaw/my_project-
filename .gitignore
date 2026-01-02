@@ -1,0 +1,39 @@
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Node / JS
+node_modules/
+dist/
+build/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Flutter / Dart (إذا mobile_front Flutter)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+
+# Android / iOS (إذا React Native/Flutter)
+android/.gradle/
+android/local.properties
+ios/Pods/
+
+# IDE / OS
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
