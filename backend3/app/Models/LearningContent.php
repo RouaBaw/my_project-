@@ -16,6 +16,10 @@ class LearningContent extends Model
     {
         return $this->hasMany(Game::class, 'learning_content_id');
     }
+    public function stories()
+    {
+        return $this->hasMany(Story::class, 'learning_content_id');
+    }
     public function packages()
     {
         return $this->hasMany(ContentPackage::class);

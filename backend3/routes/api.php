@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\StoryController;
 // مسارات المصادقة العامة (لا تحتاج توكن)
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -20,6 +20,18 @@ Route::post('login', [AuthController::class, 'login']);
 
 // المسارات التي تتطلب مصادقة (يجب إرسال التوكن مع الطلب)
 Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/stories', [StoryController::class, 'store']);
+    Route::get('/stories/{id}', [StoryController::class, 'show']);
+    Route::put('/stories/{id}', [StoryController::class, 'update']);
+    Route::delete('/stories/{id}', [StoryController::class, 'destroy']);
+    Route::get('/stories', [StoryController::class, 'published']); // المنشورة
+    Route::get('/stories-pending', [StoryController::class, 'pending']); // قيد المراجعة
+    Route::post('/stories/{id}/approve', [StoryController::class, 'approve']);
+    Route::post('/stories/{id}/reject', [StoryController::class, 'reject']);
+    Route::post('/stories/full', [StoryController::class, 'storeFull']);
+    Route::post('/stories/{id}/full-update', [StoryController::class, 'updateFull']);
+    Route::get('/courses_stories/{id}', [StoryController::class, 'courseStories']);
     //قبول او رفض المستخدم
     Route::patch('/users/{id}/update-status', [UserController::class, 'updateStatus']);
 

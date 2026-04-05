@@ -29,6 +29,7 @@ class LearningContentController extends Controller
                     ->withCount('ratings'); // جلب عدد الأشخاص الذين قيموا كل درس
             },
             'contents.packages',
+            'contents.stories',
             'contents.games',
             'contents.questions.answers',
             // جلب تقييم المستخدم الحالي فقط لهذا الدرس إن وجد

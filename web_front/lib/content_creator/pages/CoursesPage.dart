@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:web_front1/content_creator/pages/stories/story_manager.dart';
 import '../controllers/course_controller.dart';
 import '../pages/WebCourseVideosPage.dart';
 import 'course_games_manager.dart';
@@ -402,7 +403,42 @@ class _CoursesPageState extends State<CoursesPage> {
 
                   // ===== الأزرار =====
                   Row(
-                    children: [
+                    children: [      Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final dynamic rawId =
+                              content['id'] ?? content['learning_content_id'];
+                          final int? learningContentId = rawId is int
+                              ? rawId
+                              : int.tryParse(rawId?.toString() ?? '');
+                          if (learningContentId == null) {
+                            Get.snackbar(
+                              'تنبيه',
+                              'لا يمكن فتح إدارة القصص: معرف المحتوى غير متوفر',
+                              backgroundColor: Colors.orange,
+                              colorText: Colors.white,
+                            );
+                            return;
+                          }
+
+                          Get.to(() => StoryManagerPage(
+                                pathId: widget.pathId,
+                                learningContentId: learningContentId,
+                                contentTitle: title,
+                              ));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF38B2AC),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                        ),
+                        child: const Text('إدارة القصص'),
+                      ),
+                    ),
+                      SizedBox(width: 8.w),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
