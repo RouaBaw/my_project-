@@ -1,0 +1,11 @@
+
+*.zip
+*.rar
+**/.metadata
+**/build/
+**/android/build/
+**/ios/Pods/
+**/linux/flutter/generated_*
+**/windows/flutter/generated_*
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+backend/public/uploads/
