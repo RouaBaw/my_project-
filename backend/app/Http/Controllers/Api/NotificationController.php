@@ -17,14 +17,14 @@ class NotificationController extends Controller
         $user = $request->user();
 
         $query = $user->notifications()->latest();
-
+        // إذا أرسل unread=1 تجلب غير المقروء فقط.
         if ($request->boolean('unread')) {
             $query->whereNull('read_at');
         }
 
         $perPage = min((int) $request->query('per_page', 20), 100);
         $paginator = $query->paginate($perPage);
-
+        // ترجع الإشعارات + عدد غير المقروء + معلومات الصفحات.
         return response()->json([
             'status'       => 'success',
             'data'         => $paginator->items(),

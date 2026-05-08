@@ -26,6 +26,7 @@ class PointsService
      * @return PointTransaction|null The newly created transaction
      *                               or null if it was a duplicate.
      */
+    // أضف للطفل 5 نقاط بسبب محاولة اختبار رقم 12.
     public static function award(
         User $user,
         int $points,
@@ -34,10 +35,14 @@ class PointsService
         ?int $referenceId = null,
         ?string $note = null
     ): ?PointTransaction {
+        // إذا كانت النقاط صفر أو أقل، لا يتم إضافة شيء.
         if ($points <= 0) {
             return null;
         }
-
+        // منع تكرار النقاط
+        // type = quiz_correct
+        // reference_type = quiz_attempt
+        // reference_id = 12
         return DB::transaction(function () use ($user, $points, $type, $referenceType, $referenceId, $note) {
             if ($referenceType !== null && $referenceId !== null) {
                 $existing = PointTransaction::where('type', $type)
@@ -48,7 +53,7 @@ class PointsService
                     return null;
                 }
             }
-
+            // إنشاء حركة نقاط
             $tx = PointTransaction::create([
                 'user_id'        => $user->id,
                 'points'         => $points,
@@ -151,7 +156,7 @@ class PointsService
                 'code'    => 422,
             ];
         }
-
+        // هنا يختار أول خطة فعالة، مرتبة حسب السعر من الأرخص إلى الأغلى.
         $plan = SubscriptionPlan::where('is_active', true)
             ->orderBy('price', 'asc')
             ->first();
@@ -189,8 +194,9 @@ class PointsService
                 'reference_id'   => $redemption->id,
                 'note'           => 'استبدال 100 نقطة بشهر اشتراك مجاني',
             ]);
-
+            // خصم النقاط من رصيد الطفل
             $child->decrement('points_balance', self::REDEMPTION_COST);
+            // يعيد تحميل بيانات الطفل من قاعدة البيانات حتى يصبح الرصيد الجديد موجودًا داخل $child.
             $child->refresh();
 
             NotificationService::rewardRedeemed($child, $redemption);

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+// حتى يرسل إشعار موحد الشكل إلى قاعدة البيانات.
 use App\Notifications\GenericNotification;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
 
@@ -42,18 +43,24 @@ class NotificationService
         if (empty($payload['actor_id']) && $actorId) {
             $payload['actor_id'] = $actorId;
         }
-
+        // يعني إذا كان عندنا مجموعة مستخدمين، مثل مجموعة الأدمنز والمدققين.
         if ($recipients instanceof \Illuminate\Support\Collection) {
+            // حذف الفاعل من قائمة المستلمين
+            // إذا كان الفاعل نفسه موجودًا ضمن المستلمين، يتم حذفه.
             if ($actorId) {
                 $recipients = $recipients->filter(fn ($u) => $u->id !== $actorId);
             }
+            // إذا بعد التصفية لم يبقَ أي مستلم، تتوقف الدالة.
             if ($recipients->isEmpty()) {
                 return;
             }
+            // يعني إذا المستلم شخص واحد فقط.
+            // إذا كان المستلم هو نفسه الشخص الذي سبب الحدث، لا ترسل له إشعارًا.
         } elseif ($recipients instanceof User) {
             if ($actorId && $recipients->id === $actorId) {
                 return;
             }
+            // إذا $recipients فارغ أو null، تتوقف الدالة.
         } elseif (!$recipients) {
             return;
         }
