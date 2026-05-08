@@ -9,8 +9,7 @@ class Story extends Model
     protected $fillable = [
         'learning_content_id',
         'title',
-        'description'
-        ,
+        'description',
         'status',
         'creator_id'
     ];
